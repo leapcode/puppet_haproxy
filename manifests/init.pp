@@ -15,6 +15,10 @@
 #   Chooses whether haproxy should be installed or ensured absent.
 #   Currently ONLY accepts valid boolean true/false values.
 #
+# [*version*]
+#   Allows you to specify what version of the package to install.
+#   Default is simply 'present'
+#
 # [*global_options*]
 #   A hash of all the haproxy global options. If you want to specify more
 #    than one option (i.e. multiple timeout or stats options), pass those
@@ -62,6 +66,7 @@
 class haproxy (
   $manage_service   = true,
   $enable           = true,
+  $version          = 'present',
   $global_options   = $haproxy::params::global_options,
   $defaults_options = $haproxy::params::defaults_options
 ) inherits haproxy::params {
@@ -69,7 +74,7 @@ class haproxy (
 
   package { 'haproxy':
     ensure  => $enable ? {
-      true  => present,
+      true  => $version,
       false => absent,
     },
     name    => 'haproxy',
